@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo pkill -9 -f /home/pi/code/RPi_1wire_temperature/thermometer.py 
+sleep 1
+sudo python /home/pi/code/RPi_1wire_temperature/thermometer.py &
