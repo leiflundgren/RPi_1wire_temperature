@@ -3,6 +3,7 @@ import glob
 import time
 import subprocess
 import lcddriver
+import datetime
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -28,9 +29,8 @@ def read_temp_raw_subprocess( adr ):
 
 def read_temp( adr ):
     lines = read_temp_raw_subprocess( adr )
-    while lines[0].strip()[-3:] != 'YES':
-        time.sleep(0.2)
-        lines = read_temp_raw_subprocess( adr )
+    if lines[0].strip()[-3:] != 'YES':
+        return 999,999
     equals_pos = lines[1].find('t=')
     if equals_pos != -1:
         temp_string = lines[1][equals_pos+2:]
@@ -42,8 +42,10 @@ lcd = lcddriver.lcd()
 time.sleep(1)
 
 while True:
-	lcd.lcd_display_string("Inne    "+str(round(read_temp('28-00000436bb6d')[0], 1))+"C", 1)
+	lcd.lcd_display_string("Bastu   "+str(round(read_temp('28-0000043796b1')[0], 1))+"C", 1)
 	lcd.lcd_display_string("Ute     "+str(round(read_temp('28-000004374902')[0], 1))+"C", 2)
-	lcd.lcd_display_string("Bastun  "+str(round(read_temp('28-0000043796b1')[0], 1))+"C", 3)
-	time.sleep(1)
+	lcd.lcd_display_string("Vatten  "+str(round(read_temp('28-0000045d8f34')[0], 1))+"C", 3)
+	now = datetime.datetime.now()
+#	lcd.lcd_display_string(now.strftime("%Y-%m-%d %H:%M:%S"), 4)
+	time.sleep(30)
 
